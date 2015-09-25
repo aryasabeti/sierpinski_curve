@@ -7,7 +7,7 @@
 		width: 100%;
 	}
 	canvas {
-		background: gray;
+		background: rgb(40,40,40);
 		width: 100%;
 		height: 100%;
 		margin: auto;
@@ -17,70 +17,73 @@
 <head>
 <script type="text/javascript" src="js/paper-full.min.js"></script>
 <script type="text/paperscript" canvas="sierpinski">
-	var path = new Path();
-	path.strokeColor = 'black';
 
-	function top(level, dist) {
-		if(level > 0) {
-			top(level - 1, dist)
-			path.lineBy(dist, dist)
-
-			right(level - 1, dist)
-			path.lineBy(2 * dist, 0)
-
-			left(level - 1, dist)
-			path.lineBy(dist, -dist)
-
-			top(level - 1, dist)
-		}
-	}
-
-	function right(level, dist) {
-		if(level > 0) {
-			right(level - 1, dist)
-			path.lineBy(-dist, dist)
-			
-			bottom(level - 1, dist)
-			path.lineBy(0, 2 * dist)
-
-			top(level - 1, dist)
-			path.lineBy(dist, dist)
-
-			right(level - 1, dist)
-		}
-	}
-
-	function left(level, dist) {
-		if(level > 0) {
-			left(level - 1, dist)
-			path.lineBy(dist, -dist)
-			
-			top(level - 1, dist)
-			path.lineBy(0, -2 * dist)
-
-			bottom(level - 1, dist)
-			path.lineBy(-dist, -dist)
-
-			left(level - 1, dist)
-		}
-	}
-
-	function bottom(level, dist) {
-		if(level > 0) {
-			bottom(level - 1, dist)
-			path.lineBy(-dist, -dist)
-
-			left(level - 1, dist)
-			path.lineBy(-2*dist, 0)
-
-			right(level - 1, dist)
-			path.lineBy(-dist, dist)
-
-			bottom(level - 1, dist)
-		}
-	}
 
 	function drawSierpinski(level, width, height) {
+
+		function top(level, dist) {
+			if(level > 0) {
+				top(level - 1, dist)
+				path.lineBy(dist, dist)
+
+				right(level - 1, dist)
+				path.lineBy(2 * dist, 0)
+
+				left(level - 1, dist)
+				path.lineBy(dist, -dist)
+
+				top(level - 1, dist)
+			}
+		}
+
+		function right(level, dist) {
+			if(level > 0) {
+				right(level - 1, dist)
+				path.lineBy(-dist, dist)
+				
+				bottom(level - 1, dist)
+				path.lineBy(0, 2 * dist)
+
+				top(level - 1, dist)
+				path.lineBy(dist, dist)
+
+				right(level - 1, dist)
+			}
+		}
+
+		function left(level, dist) {
+			if(level > 0) {
+				left(level - 1, dist)
+				path.lineBy(dist, -dist)
+				
+				top(level - 1, dist)
+				path.lineBy(0, -2 * dist)
+
+				bottom(level - 1, dist)
+				path.lineBy(-dist, -dist)
+
+				left(level - 1, dist)
+			}
+		}
+
+		function bottom(level, dist) {
+			if(level > 0) {
+				bottom(level - 1, dist)
+				path.lineBy(-dist, -dist)
+
+				left(level - 1, dist)
+				path.lineBy(-2*dist, 0)
+
+				right(level - 1, dist)
+				path.lineBy(-dist, dist)
+
+				bottom(level - 1, dist)
+			}
+		}
+
+		var path = new Path();
+		path.strokeColor = 'white';
+		// compute initial values and perform drawing
 		var dist = (1/4) * Math.min(width, height) / Math.pow(2, level)
 		centering = width > height ? width/2 - height/2 : 0
 		path.add(2*dist + centering, dist)
