@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<style>
+	body {
+
+	}
+	div {
+		width: 100%;
+	}
+	canvas {
+		background: gray;
+		width: 100%;
+		height: 100%;
+		margin: auto;
+	}
+</style>
+<html>
+<head>
+<script type="text/javascript" src="js/paper-full.min.js"></script>
+<script type="text/paperscript" canvas="sierpinski">
+	var path = new Path();
+	path.strokeColor = 'black';
+
+	function top(level, dist) {
+		if(level > 0) {
+			top(level - 1, dist)
+			path.lineBy(dist, dist)
+
+			right(level - 1, dist)
+			path.lineBy(2 * dist, 0)
+
+			left(level - 1, dist)
+			path.lineBy(dist, -dist)
+
+			top(level - 1, dist)
+		}
+	}
+
+	function right(level, dist) {
+		if(level > 0) {
+			right(level - 1, dist)
+			path.lineBy(-dist, dist)
+			
+			bottom(level - 1, dist)
+			path.lineBy(0, 2 * dist)
+
+			top(level - 1, dist)
+			path.lineBy(dist, dist)
+
+			right(level - 1, dist)
+		}
+	}
+
+	function left(level, dist) {
+		if(level > 0) {
+			left(level - 1, dist)
+			path.lineBy(dist, -dist)
+			
+			top(level - 1, dist)
+			path.lineBy(0, -2 * dist)
+
+			bottom(level - 1, dist)
+			path.lineBy(-dist, -dist)
+
+			left(level - 1, dist)
+		}
+	}
+
+	function bottom(level, dist) {
+		if(level > 0) {
+			bottom(level - 1, dist)
+			path.lineBy(-dist, -dist)
+
+			left(level - 1, dist)
+			path.lineBy(-2*dist, 0)
+
+			right(level - 1, dist)
+			path.lineBy(-dist, dist)
+
+			bottom(level - 1, dist)
+		}
+	}
+
+	function drawSierpinski(level, width, height) {
+		var dist = (1/4) * Math.min(width, height) / Math.pow(2, level)
+		centering = width > height ? width/2 - height/2 : 0
+		path.add(2*dist + centering, dist)
+
+		top(level, dist)
+		path.lineBy(dist, dist) // glue segment
+
+		right(level, dist)
+		path.lineBy(-dist, dist) // glue segment
+
+		bottom(level, dist)
+		path.lineBy(-dist, -dist) // glue segment
+
+		left(level, dist)
+		path.lineBy(dist, -dist) // glue segment
+	}
+
+	var canvas = document.getElementById("sierpinski")
+	drawSierpinski(1, canvas.width, canvas.height)
+	drawSierpinski(2, canvas.width, canvas.height)
+	drawSierpinski(3, canvas.width, canvas.height)
+	drawSierpinski(4, canvas.width, canvas.height)
+
+</script>
+</head>
+<body>
+	<div>
+		<canvas id="sierpinski" resize></canvas>
+	</div>
+</body>
+</html>
