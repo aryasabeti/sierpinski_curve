@@ -24,7 +24,7 @@
 <script type="text/javascript" src="js/paper-full.min.js"></script>
 <script type="text/paperscript" canvas="sierpinski">
 
-	function drawSierpinski(level, canvas) {
+	function drawSierpinski(level, canvas, color) {
 
 		function top(level, dist) {
 			if(level > 0) {
@@ -88,9 +88,9 @@
 
 		var width = canvas.width
 		var height = canvas.height
-		var path = new Path();
-		path.visible = true;
-		path.strokeColor = 'white';
+		var path = new Path()
+		path.visible = true
+		path.strokeColor = color
 
 		// compute initial values and perform drawing
 		var dist = (1/4) * Math.min(width, height) / Math.pow(2, level)
@@ -113,29 +113,22 @@
 		return path
 	}
 
+	var fillColors = ["#ddddff", "#ddddf5", "#ddddef", "#dddde5", "#dddddf", "#ddddd5", "#ddddcf"]
 	var iterations = 7
-	var color = 'white'
+	var color = '#dddddd'
 	var canvas = document.getElementById("sierpinski")
 	var paths = Array()
 	var interval
 	for(var nth = 0; nth < iterations; nth++)
-		paths.push(drawSierpinski(nth, canvas))
+		paths.push(drawSierpinski(nth, canvas, fillColors[nth]))
 
 	function onMouseMove(event) {
-		for(var i = 0; i < iterations; i++) {
-			if(i == curInterval(event.point, iterations)) {
-				interval = i
-				// paths[i].visible = true
-			}
-			else {
-				// paths[i].visible = true
-			}
-		}
+		interval = curInterval(event.point, iterations)
 	}
 
 	function onMouseDown(event) {
 		if(paths[interval].fillColor == null)
-			paths[interval].fillColor = 'white'
+			paths[interval].fillColor = fillColors[interval]
 		else
 			paths[interval].fillColor = null
 	}
@@ -152,7 +145,6 @@
 	}
 
 	function onFrame(event) {
-
 		for(var i = 0; i < iterations; i++) {
 			if(interval != i) {
 				paths[i].opacity = Math.max(paths[i].opacity - 0.06, 0)
@@ -161,8 +153,6 @@
 				paths[interval].opacity = 1
 			}
 		}
-
-		paper.view.draw()
 	}
 
 </script>
