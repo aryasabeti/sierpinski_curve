@@ -89,10 +89,10 @@
 		var width = canvas.width
 		var height = canvas.height
 		var path = new Path();
-		path.visible = false;
+		path.visible = true;
 		path.strokeColor = 'white';
-		// compute initial values and perform drawing
 
+		// compute initial values and perform drawing
 		var dist = (1/4) * Math.min(width, height) / Math.pow(2, level)
 		centering = width > height ? width/2 - height/2 : 0
 		path.add(2*dist + centering, dist)
@@ -113,30 +113,27 @@
 		return path
 	}
 
-	var nth = 0
 	var iterations = 7
-	var color = null
+	var color = 'white'
 	var canvas = document.getElementById("sierpinski")
-
-	paths = Array()
-	for(var nth = 0; nth < iterations; nth++) {
+	var paths = Array()
+	var interval
+	for(var nth = 0; nth < iterations; nth++)
 		paths.push(drawSierpinski(nth, canvas))
-	}
-
-	var interval = canvas.height / iterations
-	var whichInterval
 
 	function onMouseMove(event) {
 		for(var i = 0; i < iterations; i++) {
-			if(i == curInterval(event.point, iterations))
-				paths[i].visible = true
-			else
-				paths[i].visible = false
+			if(i == curInterval(event.point, iterations)) {
+				interval = i
+				// paths[i].visible = true
+			}
+			else {
+				// paths[i].visible = true
+			}
 		}
 	}
 
 	function onMouseDown(event) {
-		var interval = curInterval(event.point, iterations)
 		if(paths[interval].fillColor == null)
 			paths[interval].fillColor = 'white'
 		else
@@ -144,6 +141,7 @@
 	}
 
 	function curInterval(point, iterations) {
+		var interval = canvas.height / iterations
 		for(var i = 1; i < iterations + 1; i++) {
 
 			var p = point['y'] - i * interval
@@ -151,6 +149,20 @@
 				return i - 1
 			}
 		}
+	}
+
+	function onFrame(event) {
+
+		for(var i = 0; i < iterations; i++) {
+			if(interval != i) {
+				paths[i].opacity = Math.max(paths[i].opacity - 0.06, 0)
+			}
+			else {
+				paths[interval].opacity = 1
+			}
+		}
+
+		paper.view.draw()
 	}
 
 </script>
